@@ -2,10 +2,6 @@
 
 Upload a file to a s3 bucket. 
 
-Synchronized a directory to a s3 bucket. It makes the bucket identical to the `source-dir`.
-Note that this means that remote files that are not in the `source-dir` are deleted. 
-The synchronized files will get an public access level.
-
 You can use application and deployment variables in wercker.
 
 View this step in the [wercker directory](#TODO)
