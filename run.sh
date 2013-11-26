@@ -11,20 +11,16 @@ then
     fail 'missing or empty option key_secret, please check wercker.yml'
 fi
 
-if [ ! -n "$WERCKER_S3PUT_BUCKET_URL" ]
+if [ ! -n "$WERCKER_S3PUT_URL" ]
 then
     fail 'missing or empty option bucket_url, please check wercker.yml'
 fi
 
-if [ ! -n "$WERCKER_S3PUT_SOURCE_FILE" ]
+if [ ! -n "$WERCKER_S3PUT_FILE" ]
 then
     fail 'missing or empty option source_file, please check wercker.yml'
 fi
 
-if [ ! -n "$WERCKER_S3PUT_DEST_FILE" ]
-then
-    fail 'missing or empty option dest_file, please check wercker.yml'
-fi
 
 if ! type s3cmd &> /dev/null ;
 then
@@ -48,16 +44,13 @@ echo "access_key=$WERCKER_S3PUT_KEY_ID" >> .s3cfg
 echo "secret_key=$WERCKER_S3PUT_KEY_SECRET" >> .s3cfg
 debug "generated .s3cfg for key $WERCKER_S3PUT_KEY_ID"
 
-source_file="$WERCKER_ROOT/$WERCKER_S3PUT_SOURCE_FILE"
-dest_file="$WERCKER_S3PUT_BUCKET_URL/$WERCKER_S3PUT_DEST_FILE"
-
 info 'starting s3 upload'
 
 # TODO make public an option
 
 set +e
-debug "s3cmd put --acl-public --verbose '$source_file' '$dest_file'"
-sync_output=$(s3cmd sync --acl-public --verbose "$source_file" "$dest_file")
+debug "s3cmd put --acl-public --verbose '$WERCKER_S3PUT_FILE' '$WERCKER_S3PUT_URL'"
+sync_output=$(s3cmd put --acl-public --verbose "$WERCKER_S3PUT_FILE" "$WERCKER_S3PUT_URL")
 
 if [[ $? -ne 0 ]];then
     warning $sync_output

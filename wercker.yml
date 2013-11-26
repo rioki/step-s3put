@@ -1,0 +1,4 @@
+box: default
+build: 
+    steps:
+        - validate-wercker-step
